@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.society.managment.project.entity.SocietyDetail;
 import com.society.managment.project.repository.SocietyRepository;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -25,62 +26,54 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin
 @RequiredArgsConstructor
 public class SocietyController {
-	
-	private final  SocietyRepository societyRepository;
-	
-	@PostMapping("/saveSociety")
-	public ResponseEntity<?> saveSociety(@RequestBody SocietyDetail societyDetail) {
 
-		societyRepository.save(societyDetail);
-		return ResponseEntity.status(HttpStatus.OK).body("Society created successfully.");
+    private final SocietyRepository societyRepository;
 
-	}
+    @Tag(name = "Society", description = "API for creating a new society")
+    @PostMapping("/saveSociety")
+    public ResponseEntity<?> saveSociety(@RequestBody SocietyDetail societyDetail) {
+        societyRepository.save(societyDetail);
+        return ResponseEntity.status(HttpStatus.OK).body("Society created successfully.");
+    }
 
-	@GetMapping("/getAllSociety")
-	public ResponseEntity<?> getAllSociety() {
+    @Tag(name = "Society", description = "API for retrieving all societies")
+    @GetMapping("/getAllSociety")
+    public ResponseEntity<?> getAllSociety() {
+        List<SocietyDetail> c = societyRepository.findAll();
+        if (c.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.of(Optional.of(c));
+    }
 
-		List<SocietyDetail> c = societyRepository.findAll();
-		if(c.size()<=0)
-		{
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
-		return ResponseEntity.of(Optional.of(c));
-	}
+    @Tag(name = "Society", description = "API for retrieving a society by ID using request parameter")
+    @GetMapping("/getSocietyByIdReq")
+    public ResponseEntity<?> getAllSocietyByIdUsingRequestParam(@RequestParam("societyId") Integer id) {
+        try {
+            societyRepository.findById(id).orElseThrow();
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 
-	@GetMapping("/getSocietyByIdReq")
-	public ResponseEntity<?> getAllSocietyByIdUsingRequestParam(@RequestParam("societyId") Integer id) {
-		try {
-			societyRepository.findById(id).get();
-			return ResponseEntity.status(HttpStatus.OK).build();
-		}
-		catch(Exception e ){
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
-		
-	}
-
-
-	
-	@PutMapping("/updateSociety/{id}")
-	public ResponseEntity<?> updateOwners(@PathVariable Integer id,@RequestBody SocietyDetail updateSociety) {
-		
-		try {
-			SocietyDetail originalSociety = societyRepository.findById(id).get();
-			originalSociety.setAddress(updateSociety.getAddress());
-			originalSociety.setCity(updateSociety.getCity());
-			originalSociety.setPincode(updateSociety.getPincode());
-			originalSociety.setSociety_name(updateSociety.getSociety_name());
-			originalSociety.setState(updateSociety.getState());
-			originalSociety.setTotal_houses(updateSociety.getTotal_houses());
-			societyRepository.save(originalSociety);
-			 return ResponseEntity.ok().body(originalSociety);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
-		
-	}
+    @Tag(name = "Society", description = "API for updating a society by ID")
+    @PutMapping("/updateSociety/{id}")
+    public ResponseEntity<?> updateSociety(@PathVariable Integer id, @RequestBody SocietyDetail updatedSociety) {
+        try {
+            SocietyDetail originalSociety = societyRepository.findById(id).orElseThrow();
+            originalSociety.setAddress(updatedSociety.getAddress());
+            originalSociety.setCity(updatedSociety.getCity());
+            originalSociety.setPincode(updatedSociety.getPincode());
+            originalSociety.setSociety_name(updatedSociety.getSociety_name());
+            originalSociety.setState(updatedSociety.getState());
+            originalSociety.setTotal_houses(updatedSociety.getTotal_houses());
+            societyRepository.save(originalSociety);
+            return ResponseEntity.ok().body(originalSociety);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }

@@ -1,21 +1,21 @@
 package com.society.managment.project.configuration;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.servers.Server;
 
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.builders.PathSelectors;
-
-@Configuration
-public class SwaggerConfig {
-    @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-              .select()
-              .apis(RequestHandlerSelectors.any())
-              .paths(PathSelectors.any())
-              .build();
+@OpenAPIDefinition(
+    info = @Info(
+        title = "Society Management API",
+        description = "API for managing society operations",
+        termsOfService = "Terms and Conditions",
+        version = "v1"
+    ),
+    servers = {
+        @Server(url = "http://localhost:8080", description = "Development Server"),
+        @Server(url = "http://test.example.com", description = "Testing Server")
     }
+)
+public class SwaggerConfig {
+   
 }

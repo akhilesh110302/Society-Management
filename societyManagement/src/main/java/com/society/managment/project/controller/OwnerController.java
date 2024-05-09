@@ -21,83 +21,72 @@ import com.society.managment.project.repository.OwnerRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
-
 @RestController
 @RequestMapping("/owner")
 @CrossOrigin
 @RequiredArgsConstructor
 public class OwnerController {
 
-	
-	private final  OwnerRepository ownerRepository;
-		
-	@PostMapping("/saveOwner")
-	public ResponseEntity<?> saveOwners(@RequestBody OwnerEntity ownerEntity) {
+    private final OwnerRepository ownerRepository;
 
-		ownerRepository.save(ownerEntity);
-		return ResponseEntity.status(HttpStatus.OK).body("Owner created successfully.");
-	}
-	@Tag(name = "get", description = "GET methods of Owner APIs")
-	@GetMapping("/getAllOwner")
-	public ResponseEntity<?> getAllOwners() {
+    @Tag(name = "Owners", description = "API for creating a new owner")
+    @PostMapping("/saveOwner")
+    public ResponseEntity<?> saveOwners(@RequestBody OwnerEntity ownerEntity) {
+        ownerRepository.save(ownerEntity);
+        return ResponseEntity.status(HttpStatus.OK).body("Owner created successfully.");
+    }
 
-		List<OwnerEntity> c = ownerRepository.findAll();
-		if(c.size()<=0)
-		{
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
-		return ResponseEntity.of(Optional.of(c));
-	}
+    @Tag(name = "Owners", description = "API for retrieving all owners")
+    @GetMapping("/getAllOwner")
+    public ResponseEntity<?> getAllOwners() {
+        List<OwnerEntity> c = ownerRepository.findAll();
+        if (c.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.of(Optional.of(c));
+    }
 
-	@GetMapping("/getOwnerByIdPv/{customerId}")
-	public  ResponseEntity<?> getAllOwnerByIdUsingPathVariable(@PathVariable("customerId") Integer id) {
-		
-		try {
-			ownerRepository.findById(id).get();
-			return ResponseEntity.status(HttpStatus.OK).build();
-		}
-		catch(Exception e ){
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
-		
-	}
+    @Tag(name = "Owners", description = "API for retrieving an owner by ID using path variable")
+    @GetMapping("/getOwnerByIdPv/{customerId}")
+    public ResponseEntity<?> getAllOwnerByIdUsingPathVariable(@PathVariable("customerId") Integer id) {
+        try {
+            ownerRepository.findById(id).orElseThrow();
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 
-	@GetMapping("/getOwnerByIdReq")
-	public ResponseEntity<?> getAllOwnerByIdUsingRequestParam(@RequestParam("customerId") Integer id) {
-		try {
-			ownerRepository.findById(id).get();
-			return ResponseEntity.status(HttpStatus.OK).build();
-		}
-		catch(Exception e ){
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
-		
-	}
+    @Tag(name = "Owners", description = "API for retrieving an owner by ID using request parameter")
+    @GetMapping("/getOwnerByIdReq")
+    public ResponseEntity<?> getAllOwnerByIdUsingRequestParam(@RequestParam("customerId") Integer id) {
+        try {
+            ownerRepository.findById(id).orElseThrow();
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 
+    @Tag(name = "Owners", description = "API for updating an owner by ID")
+    @PutMapping("/updateOwner/{id}")
+    public ResponseEntity<?> updateOwners(@PathVariable Integer id, @RequestBody OwnerEntity updatedOwner) {
+        try {
+            OwnerEntity originalOwner = ownerRepository.findById(id).orElseThrow();
+            originalOwner.setEmail(updatedOwner.getEmail());
+            originalOwner.setAdhar_no(updatedOwner.getAdhar_no());
+            originalOwner.setIs_owner(updatedOwner.getIs_owner());
+            originalOwner.setName(updatedOwner.getName());
+            originalOwner.setPhoneNumber(updatedOwner.getPhoneNumber());
+            originalOwner.setSociety_id(updatedOwner.getSociety_id());
 
-	
-	@PutMapping("/updateOwner/{id}")
-	public ResponseEntity<?> updateOwners(@PathVariable Integer id,@RequestBody OwnerEntity updatedOwner) {
-		
-		try {
-			OwnerEntity originalOwner = ownerRepository.findById(id).get();
-			originalOwner.setEmail(updatedOwner.getEmail());
-			originalOwner.setAdhar_no(updatedOwner.getAdhar_no());
-			originalOwner.setIs_owner(updatedOwner.getIs_owner());
-			originalOwner.setName(updatedOwner.getName());
-			originalOwner.setPhoneNumber(updatedOwner.getPhoneNumber());
-			originalOwner.setSociety_id(updatedOwner.getSociety_id());
-			
-			ownerRepository.save(originalOwner);
-			 return ResponseEntity.ok().body(originalOwner);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
-		
-	}
+            ownerRepository.save(originalOwner);
+            return ResponseEntity.ok().body(originalOwner);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
