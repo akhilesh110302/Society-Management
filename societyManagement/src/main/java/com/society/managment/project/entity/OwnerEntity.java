@@ -2,6 +2,7 @@ package com.society.managment.project.entity;
 
 import com.society.managment.project.utils.TableUtils;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
@@ -24,8 +25,8 @@ public class OwnerEntity extends Auditable<Integer>  {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer owner_id;
 
-	@ManyToOne()
-	@JoinColumn(foreignKey = @ForeignKey(name = "society_id_fn_key"), name = "society_id")
+	@ManyToOne
+	@JoinColumn(foreignKey = @ForeignKey(name = "society_id_fn_key"), name = "society_id" )
 	private SocietyDetail society_id;
 
 	@Column(name = "name")
