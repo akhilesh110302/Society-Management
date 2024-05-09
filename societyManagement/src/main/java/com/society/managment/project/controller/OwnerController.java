@@ -5,11 +5,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.society.managment.project.payload.OwnerPayload;
-import com.society.managment.project.repository.OwnerRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -19,7 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 @CrossOrigin
 public class OwnerController {
 
-	private OwnerRepository ownerRepository;
+//	private OwnerRepository ownerRepository;
 	
 	@PostMapping("/saveowner")
 	public ResponseEntity<?> createOwner(HttpServletRequest httpServletRequest, @RequestBody OwnerPayload ownerPayload)
