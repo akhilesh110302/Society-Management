@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.society.managment.project.entity.OwnerEntity;
 import com.society.managment.project.repository.OwnerRepository;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 
@@ -36,7 +37,7 @@ public class OwnerController {
 		ownerRepository.save(ownerEntity);
 		return ResponseEntity.status(HttpStatus.OK).body("Owner created successfully.");
 	}
-
+	@Tag(name = "get", description = "GET methods of Owner APIs")
 	@GetMapping("/getAllOwner")
 	public ResponseEntity<?> getAllOwners() {
 
