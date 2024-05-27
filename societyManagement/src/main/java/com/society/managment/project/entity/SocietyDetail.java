@@ -21,7 +21,7 @@ public class SocietyDetail extends Auditable<Integer> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	
-	private Integer society_id;
+	private Integer id;
 
 	@Column(name = "society_name")
 	private String society_name;
