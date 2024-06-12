@@ -3,6 +3,9 @@ package com.society.managment.project.entity;
 import com.society.managment.project.utils.TableUtils;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +26,10 @@ public class VehicleDetail {
 //	| model            | VARCHAR    |
 //	| year             | INT        |
 //	| registration_no  | VARCHAR    |
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
 
 }

@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity
+//@Entity
 @Table(name = TableUtils.TABLE_MST_OWNER_DETAIL)
 @RequiredArgsConstructor
 public class MaintenanceDetail {
